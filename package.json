@@ -1,0 +1,47 @@
+{
+  "name": "immutable-setter",
+  "version": "0.0.1",
+  "description": "'Deep properties setter and getter for immutable objects'",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "babel --out-dir lib --ignore *.test.js src",
+    "test": "npm run build && mocha --compilers js:babel-core/register tests/index.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bormind/immutable-setter.git"
+  },
+  "keywords": [
+    "immutable",
+    "deep",
+    "setter",
+    "getter",
+    "setIn",
+    "getIn"
+  ],
+  "author": "Boris Schneiderman <boris@bormind.com> (http://bormind.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bormind/immutable-setter/issues"
+  },
+  "homepage": "https://github.com/bormind/immutable-setter#readme",
+  "devDependencies": {
+    "babel-cli": "6.7.7",
+    "babel-preset-es2015": "6.6.0",
+    "babel-preset-stage-0": "6.5.0",
+    "chai": "3.5.0",
+    "mocha": "2.4.5",
+    "object-assign-shim": "1.0.0",
+    "rimraf": "2.5.2"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-0"
+    ]
+  },
+  "dependencies": {
+    "lodash": "4.11.1"
+  }
+}
