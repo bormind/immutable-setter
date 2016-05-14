@@ -2,9 +2,9 @@
   "name": "immutable-setter",
   "version": "0.0.1",
   "description": "'Deep properties setter and getter for immutable objects'",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf lib",
     "build": "babel --out-dir lib --ignore *.test.js src",
     "test": "npm run build && mocha --compilers js:babel-core/register tests/index.test.js"
   },
