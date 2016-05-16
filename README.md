@@ -22,19 +22,24 @@ setIn(object: Object, keyPath: Array<String|Number(Int)|undefined>, value: Any) 
     If key is specified and it is not a last element of the keyPath and corresponding subValue  doesn't exist then
     if next key is a String than new object will be created, if next key is Number or undefined then
     Array will be created
-    Example: 
+* value - new value to be set
+
+* return - new object with new objects created along the keyPath
+
+### Examples:
 
     ```js
     //property 'b' not found in the source object
     setIn({a:'foo'}, ['a', 'b', 'c'], 'bar') => {a:'foo', b:{c:'bar'}}
+    
     //property 'b' no found in the source object followed by integer key
     setIn({a:'foo'}, ['a', 'b', 1], 'bar') => {a:'foo', b:[,'bar']} 
+    
     //property 'b' no found in the source object followed by undefined key
     setIn({a:'foo'}, ['a', 'b', ,'c'], 'bar') => {a:'foo', b:[{c:'bar'}]}
     ```
     
-* value - new value to be set
-
-* return - new object with with al the  
+    For more examples check the [test file](https://github.com/bormind/immutable-setter/blob/master/tests/index.test.js)
+    
 
 ## Alternatives
