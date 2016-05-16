@@ -23,8 +23,14 @@ export function setIn(obj, keyPath, val) {
         objCopy = Object.assign({}, obj);
       }
     } else {
-      // key can be undefined if child has to be added to the array instead of being set by key
-      objCopy = isKeyDefined ? {} : [];
+
+      if(!isKeyDefined || typeof key === 'number') {
+        objCopy = [];
+      }
+      else {
+        objCopy = {};
+      }
+
     }
 
     return {

@@ -30,13 +30,13 @@ setIn(object: Object, keyPath: Array<String|Number(Int)|undefined>, value: Any) 
 
 ```js
 //property 'b' not found in the source object
-setIn({a:'foo'}, ['a', 'b', 'c'], 'bar') => {a:'foo', b:{c:'bar'}}
-
-//property 'b' no found in the source object followed by integer key
-setIn({a:'foo'}, ['a', 'b', 1], 'bar') => {a:'foo', b:[,'bar']} 
+setIn({a:'foo'}, ['b', 'c'], 'bar') => {a:'foo', b:{c:'bar'}}
 
 //property 'b' no found in the source object followed by undefined key
-setIn({a:'foo'}, ['a', 'b', ,'c'], 'bar') => {a:'foo', b:[{c:'bar'}]}
+setIn({a:'foo'}, ['b', undefined], 'bar') => {a:'foo', b:['bar']} 
+
+//property 'b' no found in the source object followed by integer key
+setIn({a:'foo'}, ['b', 2,'c'], 'bar') => {a:'foo', b:[,,{c:'bar'}]}
 ```
 For more examples check the [test file](https://github.com/bormind/immutable-setter/blob/master/tests/index.test.js)
     

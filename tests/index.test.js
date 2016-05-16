@@ -2,7 +2,7 @@
 
 
 import { expect } from 'chai';
-import { setIn, getIn } from '../lib/index';
+import { setIn, getIn } from '../src/index';
 
 const originalObject = {
 
@@ -29,6 +29,18 @@ const originalObject = {
 };
 
 describe('setIn', function() {
+
+  it('Should create new object for not found property', function() {
+    expect(setIn({a:'foo'}, ['b', 'c'], 'bar')).to.deep.equal({a:'foo', b:{c:'bar'}});
+  });
+
+  it('Should create array for undefined child key', function() {
+    expect(setIn({a:'foo'}, ['b', undefined], 'bar')).to.deep.equal({a:'foo', b:['bar']} );
+  });
+
+  it('Should create new array for integer child key', function() {
+    expect(setIn({a:'foo'}, ['b', 2,'c'], 'bar')).to.deep.equal({a:'foo', b:[, , {c:'bar'}]});
+  });
 
   it('Should create new objects only for modified tree branch', function() {
     const newObj = setIn(originalObject, ['a', 'b', 'someNumber1'], 2);
