@@ -5,27 +5,21 @@ import { expect } from 'chai';
 import { setIn, getIn } from '../lib/index';
 
 const originalObject = {
-
   a: {
     b: {
       someText1: 'Some text 1',
       someNumber1: 1
     },
-
     c: [
       { someText: 'Some text 2', someNumber: 2 },
       { someText: 'Some text 3', someNumber: 3 }
     ]
-
   },
-
   d: {
     someText4: 'Some text 4',
     someNumber4: 4
   },
-
   e:[1, 2]
-
 };
 
 describe('setIn', function() {
