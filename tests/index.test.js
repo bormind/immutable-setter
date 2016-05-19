@@ -2,7 +2,7 @@
 
 
 import { expect } from 'chai';
-import { setIn, getIn } from '../src/index';
+import { setIn, getIn } from '../lib/index';
 
 const originalObject = {
 
