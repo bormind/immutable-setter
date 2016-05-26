@@ -82,7 +82,8 @@ include { setIn, getIn } from 'immutable-setter'
 * npm test - this will build the library, generate the lib directory, and will run tests against the build. 
 
 
-### License: MIT 
+### License:
+MIT 
  
  
  
