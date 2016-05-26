@@ -2,16 +2,16 @@
 Exposes *setIn(object, keyPath, value)*, *getIn(object, keyPath)* helper functions to simplify setting (and reading) values
 in the immutable objects.
 
-*setIn* function preserves structural sharing - returned new object has new objects created for each new or 
+*setIn* function preserves structural sharing - the returned new object has new objects created for each new or 
 modified value along the keyPath.
 
-*getIn* function provided for completeness - it returns value specified by the keyPath or undefined if key/index
-of the kyePath not found in the traversed object. This eliminates necessity of checking if each value along the keyPath
+*getIn* function is provided for completeness - it returns value specified by the keyPath or *undefined* if the key/index
+of the kyePath is not found in the traversed object. This eliminates necessity of checking if each value along the keyPath
 is defined before getting the target value. 
 
 ## Motivation
 While working with [Redux](https://github.com/reactjs/redux) based immutable state container, it is convenient
-to be able to set object properties few levels deep in the object hierarchy in immutable fashion. 
+to be able to set object's properties few levels deep in the object hierarchy in immutable fashion. 
 Usually this is done through hierarchy of reducers. But sometimes it is convenient to do it "inline" 
 through one function call. A specially in tests.
 
@@ -24,10 +24,7 @@ setIn(object: Object, keyPath: Array<String|Number(Int)|undefined>, value: Any) 
 
 * object - plain javascript object. It will be treated as immutable.
 * keyPath - array of keys and indexes specifying path to the property to be set in the the objects hierarchy.
-    can contain undefined keys indicating that value should be pushed to the and of array. 
-    If key is specified and it is not a last element of the keyPath and corresponding subValue  doesn't exist then
-    if next key is a String than new object will be created, if next key is Number or undefined then
-    Array will be created
+    Can contain undefined keys indicating that value should be pushed to the end of the array. 
 * value - new value to be set
 
 * return - new object with new objects created along the keyPath
@@ -36,7 +33,7 @@ setIn(object: Object, keyPath: Array<String|Number(Int)|undefined>, value: Any) 
 getIn(object: Object, keyPath: Array<String|Number(Int)|undefined>) => Any|undefined
 ```
 * object - plain javascript object. It will be treated as immutable.
-* keyPath - array of keys and indexes specifying path to property to read.
+* keyPath - array of keys and indexes specifying path to the property to read.
 
 ### Examples:
 

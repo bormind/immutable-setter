@@ -64,7 +64,7 @@ describe('setIn', function() {
     expect(newObj.a.j.k).to.be.equal("booo");
   });
 
-  //TODO this test brakes immutable helper library: https://www.npmjs.com/package/immutability-helper
+  //this test brakes immutable helper library: https://www.npmjs.com/package/immutability-helper
   //Should be used as an explanation why setIn is used instead
   //const newObj = update(originalObject, {a: {j: {$push:[{k: 'foo'}]}}});
   it('Should create new array if value key is undefined and parent does not exist', function() {
@@ -72,7 +72,7 @@ describe('setIn', function() {
     expect(newObj.a.j[0].k).to.be.equal("foo");
   });
 
-  it('Should create new array if array item is modified', function() {
+  it('Should create new instance of the array if array item is modified', function() {
     const newObj = setIn(originalObject, ['a', 'c', 1,'someNumber'], 10);
 
     expect(newObj.a.c).to.not.equal(originalObject.a.c);
