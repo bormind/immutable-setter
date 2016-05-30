@@ -1,12 +1,13 @@
 {
   "name": "immutable-setter",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "'Deep properties setter and getter for immutable objects'",
   "main": "lib/index.js",
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "babel --out-dir lib --ignore *.test.js src",
-    "test": "npm run build && mocha --compilers js:babel-core/register tests/index.test.js"
+    "test": "npm run build && mocha --compilers js:babel-core/register tests/index.test.js",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -42,6 +43,6 @@
     ]
   },
   "dependencies": {
-    "lodash": "4.11.1"
+    "object-assign-shim": "1.0.0"
   }
 }
