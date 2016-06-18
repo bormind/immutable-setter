@@ -2,7 +2,7 @@
 
 
 import { expect } from 'chai';
-import { setIn, getIn } from '../lib/index';
+import { setIn, getIn, deleteIn } from '../lib/index';
 
 const originalObject = {
   a: {
@@ -85,6 +85,58 @@ describe('setIn', function() {
     function() {
       expect(() => setIn(originalObject, ['a', , 'someText1'], 'abc') ).to.throw();
   });
+
+});
+
+describe('deleteIn', function () {
+  it('Should delete existing object property specified by keyPath. Only references along the key path should change',
+    function() {
+      const newObj = deleteIn(originalObject, ['a', 'c', 0, 'someNumber']);
+
+      //Delete
+      expect(newObj.a.c[0].hasOwnProperty('someNumber')).to.be.false;
+      expect(newObj.a.c[0].someText).to.be.equal('Some text 2');
+      expect(newObj.a.c.length).to.be.equal(2);
+
+      expect(newObj).to.not.equal(originalObject);
+      expect(newObj.a.c).to.not.equal(originalObject.a.c);
+      expect(newObj.a.c[0]).to.not.equal(originalObject.a.c[0]);
+
+      expect(newObj.a.c[1]).to.be.equal(originalObject.a.c[1]);
+      expect(newObj.a.b).to.be.equal(originalObject.a.b);
+
+  });
+
+  it('Should delete item fom array specified by keyPath. Only references along the key path should change',
+    function() {
+      const newObj = deleteIn(originalObject, ['a', 'c', 0]);
+
+      expect(newObj.a.c.length).to.be.equal(1);
+      expect(newObj.a.c[0].someNumber).to.be.equal(3);
+
+      expect(newObj).to.not.equal(originalObject);
+      expect(newObj.a.c).to.not.equal(originalObject.a.c);
+
+      expect(newObj.a.c[0]).to.be.equal(originalObject.a.c[1]);
+  });
+
+  it("Should return original object if key or index in keyPath doesn't exist", function() {
+    const newObj1 = deleteIn(originalObject, ['a', 'k']);
+    expect(newObj1).to.be.equal(originalObject);
+
+    const newObj2 = deleteIn(originalObject, ['a', 'e', 5]);
+    expect(newObj2).to.be.equal(originalObject);
+  });
+
+  it('Should throw an exception when keyPath provide string instead of number for the array member',
+    function() {
+      expect(() => deleteIn(originalObject, ['a', 'c', 'd'])).to.throw();
+  });
+
+  it('Should throw an exception when keyPath points to value instead of object or an array',
+    function() {
+      expect(() => deleteIn(originalObject, ['a', 'b', 'someText1', 'k'])).to.throw();
+    });
 
 });
 
