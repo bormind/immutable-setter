@@ -81,7 +81,7 @@ For non-immutable use cases [deep-get-set](https://github.com/acstll/deep-get-se
 ### Installation and use
 * npm install immutable-setter
 ```js
-include { setIn, getIn } from 'immutable-setter'
+include { setIn, deleteIn, getIn } from 'immutable-setter'
 ```
 
 ### To build and run tests
