@@ -1,8 +1,11 @@
 ## immutable-setter
-Exposes *setIn(object, keyPath, value)*, *getIn(object, keyPath)* helper functions to simplify setting (and reading) values
+Exposes *setIn(object, keyPath, value)*, *getIn(object, keyPath)*, *deleteIn(object, keyPath)* helper functions to simplify setting (deleting and reading) values
 in immutable objects.
 
 *setIn* function preserves structural sharing - the returned new object has new objects created for each new or 
+modified value along the keyPath.
+
+*deleteIn* function preserves structural sharing - the returned new object has new objects created for each new or 
 modified value along the keyPath.
 
 *getIn* function is provided for completeness - it returns value specified by the keyPath or *undefined* if the key/index
@@ -26,6 +29,16 @@ setIn(object: Object, keyPath: Array<String|Number(Int)|undefined>, value: Any) 
 * value - new value to be set
 
 * return - new object with new objects created along the keyPath
+
+```
+deleteIn(object: Object, keyPath: Array<String|Number(Int)>) => Object
+```
+
+* object - plain javascript object. It will be treated as immutable.
+* keyPath - array of keys and indexes specifying path to the property to be deleted in the the objects hierarchy.
+
+* return - new object with new objects created along the keyPath if specified keyPath value was deleted. 
+It returns original objects if value along keyPath was not found
 
 ```
 getIn(object: Object, keyPath: Array<String|Number(Int)|undefined>) => Any|undefined
