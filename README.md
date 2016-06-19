@@ -5,8 +5,8 @@ in immutable objects.
 *setIn* function preserves structural sharing - the returned new object has new objects created for each new or 
 modified value along the keyPath.
 
-*deleteIn* function preserves structural sharing - the returned new object has new objects created for each new or 
-modified value along the keyPath.
+*deleteIn* function preserves structural sharing - the returned new object has new objects created along the keyPath to  
+deleted value.
 
 *getIn* function is provided for completeness - it returns value specified by the keyPath or *undefined* if the key/index
 of the kyePath is not found in the traversed object. This eliminates necessity of checking if each value along the keyPath

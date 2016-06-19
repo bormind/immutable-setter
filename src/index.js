@@ -2,98 +2,92 @@
 
 import 'object-assign-shim';
 
-function formatKeyPaht(keyPath) {
+function formatKeyPath(keyPath) {
   return JSON.toString(keyPath);
 }
 
+function isValidObject(obj) {
+  return (typeof obj === 'object') && obj !== null;
+}
+
+function formatInvalidObjectAtPath(keyPath) {
+  return 'Invalid value found at path ' + formatKeyPath(keyPath) + '. Object was expected'
+}
+
+function validateKey(key, isArray) {
+  if(isArray) {
+    if(typeof key !== 'number') {
+      return 'Unexpected key type in the keyPath: ' + key + ' expected to be index of the array';
+    }
+  }
+  else {
+    if(!key && key !== 0) {
+      return 'Key value was not set';
+    }
+  }
+}
+
+function copyObject(obj, isArray) {
+  return isArray ? obj.slice() : Object.assign({}, obj);
+}
+
+
 export function setIn(obj, keyPath, val) {
 
-  function createValueNode(obj, keyArr, keyIndex) {
-
-    if(keyIndex >= keyArr.length) {
-      return undefined;
+  function setValue(obj, key, isArray, val) {
+    if(obj[key] === val) {
+      return obj;
     }
 
-    const key = keyArr[keyIndex];
-    const isKeyDefined = (typeof key !== 'undefined' && key !== null);
-
-    let objCopy;
-
-    if(obj) {
-      if(Array.isArray(obj)) {
-        objCopy = obj.slice();
-      }
-      else {
-        objCopy = Object.assign({}, obj);
-      }
-    } else {
-
-      if(!isKeyDefined || typeof key === 'number') {
-        objCopy = [];
-      }
-      else {
-        objCopy = {};
-      }
-
-    }
-
-    return {
-      obj: objCopy,
-      keyIndex: keyIndex,
-      isKeyDefined: isKeyDefined,
-
-      childNode: createValueNode(isKeyDefined ? objCopy[key] : undefined, keyArr, keyIndex + 1)
-    }
-
+    const copy = copyObject(obj, isArray);
+    copy[key] = val;
+    return copy;
   }
 
-  const rootNode = createValueNode(obj, keyPath, 0);
+  function setChild(obj, keyPath, keyIndex, val) {
 
-  function assignChildObjectValue(node, val) {
+    let key = keyPath[keyIndex];
+    let isArray;
+    if(typeof obj === 'undefined' || obj === null) {
+      const typeOfKey = typeof key;
+      if(key === null || typeOfKey === 'number' || typeOfKey === 'undefined') {
+        obj = [];
+      }
+      else {
+        obj = {};
+      }
+    }
 
-    let valToAssign = node.childNode ? assignChildObjectValue(node.childNode, val) : val;
+    //to check if we encounter basic value instead of object or array
+    if(!isValidObject(obj)) {
+      throw(formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
+    }
 
-    if(node.isKeyDefined) {
-      const key = keyPath[node.keyIndex];
-      node.obj[key] = valToAssign;
+    isArray = Array.isArray(obj);
+
+    if(isArray && (typeof key === 'undefined' || key === null)) {
+      key = obj.length;
+    }
+
+    const error = validateKey(key, isArray);
+    if(error) {
+      throw('Invalid keyPath ' + formatKeyPath(keyPath) + ': ' + error);
+    }
+
+    if(keyIndex === keyPath.length - 1) {
+      return setValue(obj, key, isArray, val);
     }
     else {
-      if( Array.isArray(node.obj) ) {
-        node.obj.push(valToAssign);
-      }
-      else {
-        const parentPath = keyPath.slice(0, node.keyIndex);
-        throw ('Unexpected undefined key found in the key-path. ' +
-          'Undefined key can be used in the key-path indicating that value suppose to be added to the array ' +
-          'but instead of the array object was encountered in key path ' + parentPath
-        );
-      }
+      //recursion
+      const newChild = setChild(obj[key], keyPath, keyIndex + 1, val);
+      return setValue(obj, key, isArray, newChild);
     }
-
-    return node.obj
   }
 
-  return assignChildObjectValue(rootNode, val);
+  return setChild(obj, keyPath, 0, val);
 }
 
 export function deleteIn(obj, keyPath) {
-
-  function isValidObject(obj) {
-    return (typeof obj === 'object') && obj !== null;
-  }
-
-  function validateKey(key, isArray) {
-    if(isArray) {
-      if(typeof key !== 'number') {
-        return 'Unexpected key type in the keyPath: ' + key + ' expected to be index of the array';
-      }
-    }
-    else {
-      if(!key && key !== 0) {
-        return 'Key value was not set';
-      }
-    }
-  }
 
   function isKeyFound(obj, key, isArray) {
     if(isArray) {
@@ -102,10 +96,6 @@ export function deleteIn(obj, keyPath) {
     else {
       return obj.hasOwnProperty(key);
     }
-  }
-
-  function copyObject(obj, isArray) {
-    return isArray ? obj.slice() : Object.assign({}, obj);
   }
 
   function deleteKeyFromObject(obj, key, isArray) {
@@ -125,7 +115,7 @@ export function deleteIn(obj, keyPath) {
   function deleteChild(obj, keyPath, keyIndex) {
 
     if(!isValidObject(obj)) {
-      throw('Invalid value found at path ' + formatKeyPaht(keyPath.slice(0, keyIndex-1)) + '. Object was expected');
+      throw(formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
     }
 
     const isArray = Array.isArray(obj);
@@ -133,7 +123,7 @@ export function deleteIn(obj, keyPath) {
 
     const error = validateKey(key, isArray);
     if(error) {
-      throw('Invalid keyPath ' + formatKeyPaht(keyPath) + ': ' + error);
+      throw('Invalid keyPath ' + formatKeyPath(keyPath) + ': ' + error);
     }
 
     if(!isKeyFound(obj, key, isArray)) {
@@ -168,8 +158,8 @@ export function getIn(obj, keyPath) {
       return undefined;
     }
 
-    if(typeof obj !== 'object') {
-      throw ('Invalid keyPath: expected object but simple value was reached');
+    if(!isValidObject(obj)) {
+      throw (formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
     }
 
     const key = keyArr[keyIndex];

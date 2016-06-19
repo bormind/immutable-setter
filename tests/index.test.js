@@ -36,6 +36,11 @@ describe('setIn', function() {
     expect(setIn({a:'foo'}, ['b', 2,'c'], 'bar')).to.deep.equal({a:'foo', b:[, , {c:'bar'}]});
   });
 
+  it('Should return original object if value already set', function() {
+    const newObj = setIn(originalObject, ['a', 'b'], originalObject.a.b);
+    expect(newObj).to.be.equal(originalObject);
+  });
+
   it('Should create new objects only for modified tree branch', function() {
     const newObj = setIn(originalObject, ['a', 'b', 'someNumber1'], 2);
 
