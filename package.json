@@ -1,6 +1,6 @@
 {
   "name": "immutable-setter",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "'Deep properties setter and getter for immutable objects'",
   "main": "lib/index.js",
   "scripts": {
