@@ -14,7 +14,7 @@ Immutable-setter gracefully handles situations when *KeyPath* points to the miss
 * `getIn` - if any part of the object structure is missing it will return *undefined*
 * `deleteIn` - will do nothing 
 
-Please see [Examples](#Examples) bellow and [Unit tests](./tests/index.test.js) for more details.
+Please see [Examples](###Examples) bellow and [Unit tests](./tests/index.test.js) for more details.
 
 
 ### API
