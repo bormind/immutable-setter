@@ -49,23 +49,23 @@ getIn(object: Object, keyPath: Array<String|Number(Int)|undefined>) => Any|undef
 
 ```js
 
-//update existing property
+//update existing property deep in the object structure 'bar' -> 'baz'
 constant original1 = {
     a: 'foo',
-    b: {
-        c: 'abc'
-    }
-}
-constant result1 = setIn(original1, ['b', 'c'], 'bar') 
-> result1: {
-    a: 'foo', 
-    b: {
+    b: [{
         c: 'bar'
-    }
+    }]
+}
+constant result1 = setIn(original1, ['b', 0, 'c'], 'baz') 
+> result1: {
+    a: 'foo',
+    b: [{
+        c: 'baz'
+    }]
 }
 
 
-//property 'b' not found in the source object
+//create sub object and set property
 constant original2 = {
     a: 'foo'
 }
@@ -77,7 +77,7 @@ constant result2 = setIn(original2, ['b', 'c'], 'bar')
     }
 }
 
-//property 'b' not found in the source object followed by undefined key
+//append value to the not existing yet array
 constant original3 = {
     a: 'foo'
 }
@@ -87,14 +87,16 @@ constant result3 = setIn(original3, ['b', undefined], 'bar')
     b: ['bar']
 } 
 
-//property 'b' not found in the source object followed by integer key
+//create or modify object in the array that not yet exists
 constant original4 = {
     a: 'foo'
 }
-constant result4 = setIn(original4, ['b',,'c'], 'bar')
+constant result4 = setIn(original4, ['b', undefined, 'c'], 'bar')
 > result4: { 
     a:'foo', 
-    b: [{c:'bar'}]
+    b: [{
+        c:'bar'
+    }]
 }
 ```
 For more examples check the [test file](./tests/index.test.js)
