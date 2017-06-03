@@ -5,7 +5,7 @@ To help with this problems library like [Immutable.js](https://facebook.github.i
 
 Different approach is taken by popular application state management library [Redux](https://github.com/reactjs/redux) that threat application state as immutable object. Redux uses pure functions (called *reducers*) that correspond to different parts of the State object. Reducer function accept original parts of the State object and modification parameters (*actions*) and return the new State Part with changes applied. Redux "updates" the application State by "cascading" calls to *reducers* with corresponding State Parts and "reassembling" the State in immutable fashion.   
 
-Idea of [immutable-setter](https://github.com/bormind/immutable-setter) (This library) is to `modify`, `retrieve` and `delete` deeply nested parts of regular JavaScript object structure in immutable fusion. (Functions: `setIn`, `getIn`, `deleteIn`). 
+Idea of [immutable-setter](https://github.com/bormind/immutable-setter) (This library) is to `modify`, `retrieve` and `delete` deeply nested parts of regular JavaScript object structure in immutable fusion. (Functions: `setIn`, `getIn`, `deleteIn`). Immutable-setter functions do not modify original object, but return new object that contains modification. Immutable-setter preserves Structural Sharing - only modified parts of the object structure are copied.
 
 Immutable-setter uses concept of *KeyPath* to specify target parts of the  object structure. *KeyPath* is an array of keys and indexes that describe the path to the target part of the object structure. 
 
@@ -48,19 +48,56 @@ getIn(object: Object, keyPath: Array<String|Number(Int)|undefined>) => Any|undef
 ### Examples
 
 ```js
+
 //update existing property
-setIn({a:'foo', b:{c:'abc'}}, ['b', 'c'], 'bar') => {a:'foo', b:{c:'bar'}}
+constant original1 = {
+    a: 'foo',
+    b: {
+        c: 'abc'
+    }
+}
+constant result1 = setIn(original1, ['b', 'c'], 'bar') 
+> result1: {
+    a: 'foo', 
+    b: {
+        c: 'bar'
+    }
+}
+
 
 //property 'b' not found in the source object
-setIn({a:'foo'}, ['b', 'c'], 'bar') => {a:'foo', b:{c:'bar'}}
+constant original2 = {
+    a: 'foo'
+}
+constant result2 = setIn(original2, ['b', 'c'], 'bar') 
+> result2: {
+    a: 'foo', 
+    b: {
+        c: 'bar'
+    }
+}
 
 //property 'b' not found in the source object followed by undefined key
-setIn({a:'foo'}, ['b', undefined], 'bar') => {a:'foo', b:['bar']} 
+constant original3 = {
+    a: 'foo'
+}
+constant result3 = setIn(original3, ['b', undefined], 'bar') 
+> result3: {
+    a: 'foo', 
+    b: ['bar']
+} 
 
 //property 'b' not found in the source object followed by integer key
-setIn({a:'foo'}, ['b', 2,'c'], 'bar') => {a:'foo', b:[,,{c:'bar'}]}
+constant original4 = {
+    a: 'foo'
+}
+constant result4 = setIn(original4, ['b',,'c'], 'bar')
+> result4: { 
+    a:'foo', 
+    b: [{c:'bar'}]
+}
 ```
-For more examples check the [test file](https://github.com/bormind/immutable-setter/blob/master/tests/index.test.js)
+For more examples check the [test file](./tests/index.test.js)
     
 
 ### Alternatives
