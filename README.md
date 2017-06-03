@@ -1,22 +1,21 @@
-## immutable-setter
-Exposes *setIn(object, keyPath, value)*, *getIn(object, keyPath)*, *deleteIn(object, keyPath)* helper functions to simplify setting (deleting and reading) values
-in immutable objects.
+## Motivation
+There is a lot written about advantages of using immutable data structures in you code. The problem with JavaScrip that it is require extra effort, "syntactical noise" and discipline because immutability is not "enforced" by the league. A specially if need to update deeply nested object structure. 
 
-*setIn* function preserves structural sharing - the returned new object has new objects created for each new or 
-modified value along the keyPath.
+To help with this problems library like [Immutable.js](https://facebook.github.io/immutable-js/) can be used. Immutable.js uses special version containers like Set, Map etc. and special version of object class called Record to enforce immutability in yor code.
 
-*deleteIn* function preserves structural sharing - the returned new object has new objects created along the keyPath to  
-deleted value.
+Different approach is taken by popular application state management library [Redux](https://github.com/reactjs/redux) that threat application state as immutable object. Redux uses pure functions (called *reducers*) that correspond to different parts of the State object. Reducer function accept original parts of the State object and modification parameters (*actions*) and return the new State Part with changes applied. Redux "updates" the application State by "cascading" calls to *reducers* with corresponding State Parts and "reassembling" the State in immutable fashion.   
 
-*getIn* function is provided for completeness - it returns value specified by the keyPath or *undefined* if the key/index
-of the kyePath is not found in the traversed object. This eliminates necessity of checking if each value along the keyPath
-is defined before getting the target value. 
+Idea of [immutable-setter](https://github.com/bormind/immutable-setter) (This library) is to `modify`, `retrieve` and `delete` deeply nested parts of regular JavaScript object structure in immutable fusion. (Functions: `setIn`, `getIn`, `deleteIn`). 
 
-### Motivation
-When working with a [Redux](https://github.com/reactjs/redux) based immutable state container, it is convenient
-to be able to set an object's properties a few levels deep in the object hierarchy in immutable fashion. 
-Usually this is done through a hierarchy of reducers, but sometimes it is convenient to do it "inline" 
-through one function call (especially in tests). The `getIn` function was added for completeness.
+Immutable-setter uses concept of *KeyPath* to specify target parts of the  object structure. *KeyPath* is an array of keys and indexes that describe the path to the target part of the object structure. 
+
+Immutable-setter gracefully handles situations when *KeyPath* points to the missing parts of the Object Structure: 
+* `setIn` - missing parts wil be generated. Immutable-setter infers type (Object vs. Array) to be generated based on KeyPath part pointing the object's children. If key is a string than Object class instance is created, if key is and Integer or *undefined* - Array instance is created. 
+* `getIn` - if any part of the object structure is missing it will return *undefined*
+* `deleteIn` - will do nothing 
+
+Please see [Examples](#Examples) bellow and [Unit tests](./tests/index.test.js) for more details.
+
 
 ### API
 ```
