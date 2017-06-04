@@ -10,12 +10,68 @@ Idea of [immutable-setter](https://github.com/bormind/immutable-setter) (This li
 Immutable-setter uses concept of *KeyPath* to specify target parts of the  object structure. *KeyPath* is an array of keys and indexes that describe the path to the target part of the object structure. 
 
 Immutable-setter gracefully handles situations when *KeyPath* points to the missing parts of the Object Structure: 
-* `setIn` - missing parts will be generated. Immutable-setter infers type (Object vs. Array) to be generated based on KeyPath part pointing to the object's children. If key is a string then Object class instance is created, if key is an Integer or *undefined* - Array instance is created. 
+* `setIn` - missing parts will be generated. Immutable-setter infers type (Object vs. Array) to be generated based on KeyPath part pointing to the object's children. If key is a string then Object class instance is created, if key is and Integer or *undefined* - Array instance is created. 
 * `getIn` - if any part of the object structure is missing it will return *undefined*
 * `deleteIn` - will do nothing 
 
 Please see [Examples](#examples) bellow and [Unit tests](./tests/index.test.js) for more details.
 
+### Examples
+```js
+
+//update existing property deep in the object structure 'bar' -> 'baz'
+constant original1 = {
+    a: 'foo',
+    b: [{
+        c: 'bar'
+    }]
+}
+constant result1 = setIn(original1, ['b', 0, 'c'], 'baz') 
+> result1: {
+    a: 'foo',
+    b: [{
+        c: 'baz'
+    }]
+}
+
+//create sub object and set property
+constant original2 = {
+    a: 'foo'
+}
+constant result2 = setIn(original2, ['b', 'c'], 'bar') 
+> result2: {
+    a: 'foo', 
+    b: {
+        c: 'bar'
+    }
+}
+
+//append object to the not existing yet array
+constant original3 = {
+    a: 'foo'
+}
+constant result3 = setIn(original3, ['b', undefined], {c: 'bar'}) 
+> result3: {
+    a: 'foo', 
+    b: [{ 
+        c: 'bar'
+    }]
+} 
+
+//create new object with the value and append it to the array that not yet exists
+constant original4 = {
+    a: 'foo'
+}
+constant result4 = setIn(original4, ['b', undefined, 'c'], 'bar')
+> result4: { 
+    a:'foo', 
+    b: [{
+        c:'bar'
+    }]
+}
+```
+For more examples check the [test file](./tests/index.test.js)
+    
 
 ### API
 ```
@@ -44,63 +100,6 @@ getIn(object: Object, keyPath: Array<String|Number(Int)|undefined>) => Any|undef
 ```
 * object - plain javascript object. It will be treated as immutable.
 * keyPath - array of keys and indexes specifying path of the property to read.
-
-### Examples
-
-```js
-
-//update existing property deep in the object structure 'bar' -> 'baz'
-constant original1 = {
-    a: 'foo',
-    b: [{
-        c: 'bar'
-    }]
-}
-constant result1 = setIn(original1, ['b', 0, 'c'], 'baz') 
-> result1: {
-    a: 'foo',
-    b: [{
-        c: 'baz'
-    }]
-}
-
-
-//create sub object and set property
-constant original2 = {
-    a: 'foo'
-}
-constant result2 = setIn(original2, ['b', 'c'], 'bar') 
-> result2: {
-    a: 'foo', 
-    b: {
-        c: 'bar'
-    }
-}
-
-//append value to the not existing yet array
-constant original3 = {
-    a: 'foo'
-}
-constant result3 = setIn(original3, ['b', undefined], 'bar') 
-> result3: {
-    a: 'foo', 
-    b: ['bar']
-} 
-
-//create or modify object in the array that not yet exists
-constant original4 = {
-    a: 'foo'
-}
-constant result4 = setIn(original4, ['b', undefined, 'c'], 'bar')
-> result4: { 
-    a:'foo', 
-    b: [{
-        c:'bar'
-    }]
-}
-```
-For more examples check the [test file](./tests/index.test.js)
-    
 
 ### Alternatives
 If [Immutable.js](https://facebook.github.io/immutable-js/) is used - it provides a [similar API](https://facebook.github.io/immutable-js/docs/#/Map/setIn) 
