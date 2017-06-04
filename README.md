@@ -1,16 +1,16 @@
 ## Motivation
-There is a lot written about advantages of using immutable data structures in you code. The problem with JavaScrip that it is require extra effort, "syntactical noise" and discipline because immutability is not "enforced" by the league. A specially if need to update deeply nested object structure. 
+There is a lot written about advantages of using immutable data structures in you code. The problem with JavaScrip that it is require en extra effort, "syntactical noise" and discipline because immutability is not "enforced" by the league. Especially if need to update deeply nested object structure. 
 
-To help with this problems library like [Immutable.js](https://facebook.github.io/immutable-js/) can be used. Immutable.js uses special version containers like Set, Map etc. and special version of object class called Record to enforce immutability in yor code.
+To help with this problems library like [Immutable.js](https://facebook.github.io/immutable-js/) can be used. Immutable.js uses special version containers like Set, Map etc. and special version of object class called Record to enforce immutability in your code.
 
-Different approach is taken by popular application state management library [Redux](https://github.com/reactjs/redux) that threat application state as immutable object. Redux uses pure functions (called *reducers*) that correspond to different parts of the State object. Reducer function accept original parts of the State object and modification parameters (*actions*) and return the new State Part with changes applied. Redux "updates" the application State by "cascading" calls to *reducers* with corresponding State Parts and "reassembling" the State in immutable fashion.   
+A different approach is taken by popular application state management library [Redux](https://github.com/reactjs/redux) that treat application state as immutable object. Redux uses pure functions (called *reducers*). Reducer function accept original parts of the State object and modification parameters (*actions*) and return the new State Part with changes applied. Redux "updates" the application State by "cascading" calls to *reducers* with corresponding State Parts and "reassembling" the State in immutable fashion.   
 
 Idea of [immutable-setter](https://github.com/bormind/immutable-setter) (This library) is to `modify`, `retrieve` and `delete` deeply nested parts of regular JavaScript object structure in immutable fusion. (Functions: `setIn`, `getIn`, `deleteIn`). Immutable-setter functions do not modify original object, but return new object that contains modification. Immutable-setter preserves Structural Sharing - only modified parts of the object structure are copied.
 
 Immutable-setter uses concept of *KeyPath* to specify target parts of the  object structure. *KeyPath* is an array of keys and indexes that describe the path to the target part of the object structure. 
 
 Immutable-setter gracefully handles situations when *KeyPath* points to the missing parts of the Object Structure: 
-* `setIn` - missing parts wil be generated. Immutable-setter infers type (Object vs. Array) to be generated based on KeyPath part pointing the object's children. If key is a string than Object class instance is created, if key is and Integer or *undefined* - Array instance is created. 
+* `setIn` - missing parts will be generated. Immutable-setter infers type (Object vs. Array) to be generated based on KeyPath part pointing to the object's children. If key is a string then Object class instance is created, if key is an Integer or *undefined* - Array instance is created. 
 * `getIn` - if any part of the object structure is missing it will return *undefined*
 * `deleteIn` - will do nothing 
 
@@ -23,7 +23,7 @@ setIn(object: Object, keyPath: Array<String|Number(Int)|undefined>, value: Any) 
 ```
 
 * object - plain javascript object. It will be treated as immutable.
-* keyPath - array of keys and indexes specifying path to the property to be set in the the objects hierarchy.
+* keyPath - array of keys and indexes specifying path to the property to be set in the objects hierarchy.
     Can contain undefined keys indicating that value should be pushed to the end of the array. 
 * value - new value to be set
 
@@ -34,7 +34,7 @@ deleteIn(object: Object, keyPath: Array<String|Number(Int)>) => Object
 ```
 
 * object - plain javascript object. It will be treated as immutable.
-* keyPath - array of keys and indexes specifying path to the property to be deleted in the the objects hierarchy.
+* keyPath - array of keys and indexes specifying path to the property to be deleted in the objects hierarchy.
 
 * return - new object with new objects created along the keyPath if specified keyPath value was deleted. 
 It returns original objects if value along keyPath was not found
