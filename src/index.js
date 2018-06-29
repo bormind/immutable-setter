@@ -3,7 +3,7 @@
 import 'object-assign-shim';
 
 function formatKeyPath(keyPath) {
-  return JSON.toString(keyPath);
+  return JSON.stringify(keyPath);
 }
 
 function isValidObject(obj) {
@@ -60,7 +60,7 @@ export function setIn(obj, keyPath, val) {
 
     //to check if we encounter basic value instead of object or array
     if(!isValidObject(obj)) {
-      throw(formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
+      throw new Error(formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
     }
 
     isArray = Array.isArray(obj);
@@ -71,7 +71,7 @@ export function setIn(obj, keyPath, val) {
 
     const error = validateKey(key, isArray);
     if(error) {
-      throw('Invalid keyPath ' + formatKeyPath(keyPath) + ': ' + error);
+      throw new Error('Invalid keyPath ' + formatKeyPath(keyPath) + ': ' + error);
     }
 
     if(keyIndex === keyPath.length - 1) {
@@ -115,7 +115,7 @@ export function deleteIn(obj, keyPath) {
   function deleteChild(obj, keyPath, keyIndex) {
 
     if(!isValidObject(obj)) {
-      throw(formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
+      throw new Error(formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
     }
 
     const isArray = Array.isArray(obj);
@@ -123,7 +123,7 @@ export function deleteIn(obj, keyPath) {
 
     const error = validateKey(key, isArray);
     if(error) {
-      throw('Invalid keyPath ' + formatKeyPath(keyPath) + ': ' + error);
+      throw new Error('Invalid keyPath ' + formatKeyPath(keyPath) + ': ' + error);
     }
 
     if(!isKeyFound(obj, key, isArray)) {
@@ -159,7 +159,7 @@ export function getIn(obj, keyPath) {
     }
 
     if(!isValidObject(obj)) {
-      throw (formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
+      throw new Error(formatInvalidObjectAtPath(keyPath.slice(0, keyIndex-1)));
     }
 
     const key = keyArr[keyIndex];
